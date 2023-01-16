@@ -1,0 +1,121 @@
+<div>
+  <div>
+    <h1>
+      Your todo list
+    </h1>
+  </div>
+  <div>
+    <h2>Add a new todo
+    </h2>
+  </div>
+</div>
+
+<div>
+  <div>
+
+    <form action="/insert_task" method="post">
+      <div>
+        <label for="content_box">
+          Describe the task:
+        </label>
+
+        <input type="text" id="content_box" name="query_content">
+      </div>
+
+      <div>
+        <input type="hidden" id="user_id_box" name="query_user_id" value="<%= @current_user.id %>">
+      </div>
+
+      <div>
+        <input type="hidden" id="status_box" name="query_status" value="next_up">
+      </div>
+
+      <button>
+        Add to Next Up
+      </button>
+    </form>
+  </div>
+</div>
+
+
+<div class="next_up">
+  <h2>Next Up</h2>
+  <ul>
+      <% task = @list_of_tasks.where({ :status => "next_up" }) %>
+      <% task.each do |a_task| %>
+    <li>
+        <div>  
+          <%= a_task.content %>
+        </div>
+        <small>
+          Added <%= time_ago_in_words(a_task.created_at) %> ago
+        
+          <a href="/delete_task/<%= a_task.id %>">
+            Delete
+          </a>
+        </small>
+          <form action="/modify_task/<%= a_task.id %>" method="post">
+      <div>
+        
+        <input type="hidden" id="status_box" name="query_status" value="in_progress">
+      </div>
+      <button>
+        Move to In Progress
+      </button>
+    </form>
+    </li>    
+      <% end %>
+  </ul>  
+</div>
+<div class="in_progress">
+  <h2>In Progress</h2>
+     <ul>
+      <% task = @list_of_tasks.where({ :status => "in_progress" }) %>
+      <% task.each do |a_task| %>
+    <li>  
+        <div>
+          <%= a_task.content %>
+        </div>
+        <small>
+          Started <%= time_ago_in_words(a_task.updated_at) %> ago
+        
+          <a href="/delete_task/<%= a_task.id %>">
+            Delete
+          </a>
+        </small>
+          <form action="/modify_task/<%= a_task.id %>" method="post">
+      <div>
+        
+        <input type="hidden" id="status_box" name="query_status" value="done">
+      </div>
+      <button>
+        Move to Done
+      </button>
+    </form>
+    </li>    
+      <% end %>
+  </ul>  
+</div>
+
+<div class="done">
+  <h2>Done</h2>
+     <ul>
+      <% task = @list_of_tasks.where({ :status => "done" }) %>
+      <% task.each do |a_task| %>
+    <li>
+        <div>      
+          <%= a_task.content %>
+        </div>
+        <small>
+          Completed at <%= a_task.updated_at %> 
+        
+          <a href="/delete_task/<%= a_task.id %>">
+            Delete
+          </a>
+        </small>
+    </li>    
+      <% end %>
+  </ul>  
+</div>
+
+ 
